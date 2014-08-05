@@ -39,8 +39,14 @@ function! s:create_changable_word_cmd() " {{{
 endfunction " }}}
 
 function! increment_activator#operator#get_currently_word() " {{{
-  " TODO: In future, it has been enhanced to allow many (date, datetime, ..)
-  return expand('<cword>')
+    " This works better than <cword> because it includes things like && and ||
+    let oldDefault = EasyClip#GetCurrentYank()
+
+    normal! yiw
+    let wordUnderCursor = getreg("\"")
+
+    call EasyClip#SetCurrentYank(oldDefault)
+    return wordUnderCursor
 endfunction " }}}
 
 function! increment_activator#operator#applies(identifier_key) " {{{
